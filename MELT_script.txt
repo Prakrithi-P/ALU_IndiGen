@@ -4,24 +4,26 @@ Ref Genome (GATK):
 wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/hg38/Homo_sapiens_assembly38.fasta.gz
 Generate index for GATK Ref  :  $samtools faidx Homo_sapiens_assembly38.fasta
 
-MELT -- Indigen Single: 
-
-java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Single -a -c 8 -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam  -n /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/add_bed_files/Hg38/Hg38.genes.bed -t mie38.txt -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Indigentest
-
-MELT-SPLIT:
+The following 5 commands should be run one after another
 
 Preprocessing bam file (Should be run separately for Individual .bam files): 
-$  java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Preprocess -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/hg38.fa  -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam 
+$  java -jar <Full path to MELT.jar file> Preprocess -h <Full path to hg38 ref genome fasta file>  -bamfile <Full path to individual bam file>
 
 IndivAnalysis(Should be run separately for Individual .bam files): 
-$  java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar IndivAnalysis -c 25 -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
-
+$  java -jar <Full path to MELT.jar file> IndivAnalysis -c 25 -h <Full path to hg38 ref genome fasta file> -bamfile <Full path to individual bam files> -t <Full path to me_ref zip file> -w <output directory>
+ 
+ Note : Separate Transposon ref files(-t) and  output directories are recommended to be used for each mobile element type for better results
+         example: For ALU -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_refs/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/meltsplit/ALU
+                 
 GroupAnalysis:
-$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar GroupAnalysis -discoverydir  -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta  -n /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/add_bed_files/Hg38/Hg38.genes.bed -v <full path to vcf prior file> -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+$  java –jar <Full path to MELT.jar file> GroupAnalysis -discoverydir <full path as -w in previous step> -h <Full path to ref genome fasta> -n <Full path to annotated bed file:Hg38.genes.bed from the directory */MELTv2.1.5/add_bed_files/Hg38/Hg38.genes.bed> -v <full path to vcf prior file> -t <Full path to transposable ref zip file> -w <Full path to output directory-same directory as used in previous step>
   Note : -v : path to prior file : */MELTv2.1.5/prior_files/ALU.1KGP.sites.vcf
 
 Genotyping (Should be run separately for Individual .bam files):
-$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Genotype -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/hg38.fa  -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+$  java –jar <Full path to MELT.jar file> Genotype -bamfile <Full path to individual bam file> -t <Full path to TE ref zip file> -h <Full path to ref genome fasta> -w <Full path to output directory used in the previous two steps> -p <Full path to output directory used in the previous two steps>
 
-Make VCF - Final Alu insertion genotype calls
-$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar MakeVCF -genotypingdir /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+Make VCF - Final genotype calls for polyAlus
+$  java –jar <Full path to MELT.jar file> MakeVCF -genotypingdir <Full path to output directory as in the previous three steps> -t <Full path to TE ref zip file> -h <Full path to ref genome fasta> -w <Full path to output directory used in the previous three steps> -p <Full path to output directory used in the previous three steps>
+
+Output: This will generate *.final_comp.vcf in the output directory (* - ALU/ in the respective output directory)
+Output VCF Info fields: CHROM	POS	ID (. by Default-Output vcf can be edited to provide ID_NAME)	REF	ALT	QUAL	FILTER	INFO	FORMAT	nSample_Genotypes
