@@ -1,3 +1,5 @@
+#Identifying polymorphic Alu insertions from raw bam files with MELT
+
 Ref Genome (GATK):
 wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/hg38/Homo_sapiens_assembly38.fasta.gz
 Generate index for GATK Ref  :  $samtools faidx Homo_sapiens_assembly38.fasta
