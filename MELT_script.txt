@@ -1,0 +1,25 @@
+Ref Genome (GATK):
+wget ftp://gsapubftp-anonymous@ftp.broadinstitute.org/bundle/hg38/Homo_sapiens_assembly38.fasta.gz
+Generate index for GATK Ref  :  $samtools faidx Homo_sapiens_assembly38.fasta
+
+MELT -- Indigen Single: 
+
+java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Single -a -c 8 -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam  -n /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/add_bed_files/Hg38/Hg38.genes.bed -t mie38.txt -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Indigentest
+
+MELT-SPLIT:
+
+Preprocessing bam file (Should be run separately for Individual .bam files): 
+$  java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Preprocess -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/hg38.fa  -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam 
+
+IndivAnalysis(Should be run separately for Individual .bam files): 
+$  java -jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar IndivAnalysis -c 25 -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+
+GroupAnalysis:
+$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar GroupAnalysis -discoverydir  -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta  -n /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/add_bed_files/Hg38/Hg38.genes.bed -v <full path to vcf prior file> -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+  Note : -v : path to prior file : */MELTv2.1.5/prior_files/ALU.1KGP.sites.vcf
+
+Genotyping (Should be run separately for Individual .bam files):
+$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Genotype -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/hg38.fa  -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
+
+Make VCF
+$  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar MakeVCF -genotypingdir /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
