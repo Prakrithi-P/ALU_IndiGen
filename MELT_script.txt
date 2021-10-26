@@ -21,5 +21,5 @@ $  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar GroupAnalys
 Genotyping (Should be run separately for Individual .bam files):
 $  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar Genotype -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/hg38.fa  -bamfile /home/aastha.v/scratch/IndiGentestfiles/IND19050401_S1_merge.bam -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
 
-Make VCF
+Make VCF - Final Alu insertion genotype calls
 $  java –jar /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELT.jar MakeVCF -genotypingdir /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -h /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/Homo_sapiens_assembly38.fasta -t /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/me_ref/Hg38/ALU_MELT.zip -w /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU -p /home/aastha.v/archive/Rithu/MELT/MELTv2.1.5/MELTsplittest/ALU
