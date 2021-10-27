@@ -5,3 +5,11 @@ Here, we report the genomic landscape of Alu InDels from the recently released 1
 
 
 The vcf calls for the Alus passing genotype missingness criterion are provided. The raw bam file data will be provided upon request, access to which could be requested by mail to Dr. Jyoti Yadav (j.yadav@igib.res.in), the convener of the Institutional Human Ethics Committee of CSIR-IGIB.
+
+The tools and softwares that were required to process the data:
+
+- VCFTOOLS
+- PLINK
+- bedtools
+- bedops
+- R
