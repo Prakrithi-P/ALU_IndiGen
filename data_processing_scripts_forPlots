@@ -51,6 +51,10 @@ draw.triple.venn(area1 = 22098,                          # common
 
 
 Pca
+#Merge IndiGen, SGDP and HGSVC - All shared Alus with vcf-merge
+# In bash
+plink --vcf merged.vcf --pca --out IND_SGDP_HGSVC.evec
+join pop_list.txt IND_SGDP_HGSVC.evec > IND_SGDP_HGSVC_pop.evec
+#In R
+d3<-read.csv("IND_SGDP_HGSVC_pop.evec", sep="\t", header=T)
 p3<-ggplot(d3)+ geom_point(aes(x=PC1,y=PC2,color=Population))+scale_color_manual(values=c("violet","yellow","green","blue","black","orange"))+ggtitle("Top 1% insertions (37) showing high Fst")+xlab("PC1 (25.1%)")+ylab("PC2 (19.1%)")+theme(text=element_text(size=16,  family="sans",face="bold"))+ theme(axis.text.y=element_text(size=14),axis.text.x =element_text(size=14))+theme(panel.grid.major = element_line(color="lightgrey"), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_blank())+guides(color= guide_legend(override.aes = list(size=5)))
-
-
