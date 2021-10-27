@@ -1,4 +1,7 @@
 ## split bed file in bins for correlation analysis
+
+# Intron, gene annotation files downloaded from UCSC table browser
+
 sort -k1,1 -k2,2n introns_hg38_pos.bed | mergeBed > Introns_hg38_pos.bed #similary for existing gene annotations
 #**intron density per 1MB/chr** #similarly for genic alu density
 ../bedops/bin/bedmap --echo --echo-overlap-size --fraction-map 1 --delim '\t' windows2.bed Introns_hg38_pos.bed > windows_with_intron_lengths_merged.bed
@@ -15,7 +18,8 @@ python3 ./GC_analysis.py -i /home/mmlab33/TagTaste/Homo_sapiens_assembly38.fasta
 
 #correlation
 d<-read.csv("chr1", sep="\t",header=T)
-ggscatter(d,x="GC.Content...",y="Alu.Density",add="reg.line",conf.int=F, cor.coef=T, cor.method = "pearson",title = "Alu Density ~ Intron Density", xlab="Introns(bp)",ylab = "Alu Insertions (bp)")
+ggscatter(d,x="Intron density",y="Alu.Density",add="reg.line",conf.int=F, cor.coef=T, cor.method = "pearson",title = "Alu Density ~ Intron Density", xlab="Introns(bp)",ylab = "Alu Insertions (bp)")
+# similarly for other factors - Alu.Density ~ GC content/ Gene density,..
 
 ## chr wise density
 b<-read.csv("closest_dist_bins_count_n",sep="\t",header=T)
@@ -35,25 +39,28 @@ bx<-as.numeric(scan("D:/ALU_INDIGEN/1000g/brks", character(), quote=""))
 binCounts(dd, idxs = NULL,bx,right=F)
 
 
-#Venn diagram showing Alus in IndiGen, SGDP and HGSVC
-draw.triple.venn(area1 = 22098,                          # common
-                 area2 = 12044,
-                 area3 = 5102,
-                 n12 =3560 ,
-                 n23 =4394 ,
-                 n13 = 3505,
-                 n123 = 3288,
+#Venn diagram showing Alus in IndiGen, SGDP and HGSVC with R - The overlap was identified with the online tool Venny
+draw.triple.venn(area1 = 9239,                          # no.of Alus in Indigen
+                 area2 = 11661,                         # SGDP
+                 area3 = 9315,                          #HGSVC
+                 n12 =3531 ,
+                 n23 =4275 ,
+                 n13 = 2401,
+                 n123 = 2263,
                  fill = c("grey", "#ff8080" ,"orange"),col=c("black","black","black"),fontfamily = "sans",
                  cex=3,
                  cat.cex=1.5,cat.fontfamily = "sans", cat.fontface = "bold",
                  print.mode=c("raw"),
-                 category = c("IndiGen","1000 Genomes", "SAS(1000 Genomes)"))
+                 category = c("IndiGen","SGDP", "HGSVC"))
 
 
-Pca
+Pca plot
 #Merge IndiGen, SGDP and HGSVC - All shared Alus with vcf-merge
 # In bash
-plink --vcf merged.vcf --pca --out IND_SGDP_HGSVC.evec
+plink --vcf merged.vcf --pca --out IND_SGDP_HGSVC.evec #pca
+#Fst analysis
+vcftools --vcf merged.vcf --weir-fst-pop AFR_SGDP_HGSVC --weir-fst-pop EUR_SGDP_HGSVC --weir-fst-pop EAS_SGDP_HGSVC --weir-fst-pop IndiGen_SAS_SGDP_HGSVC --out Alus_Fst
+# The Alus were sorted based on their Fst values and the top 75%, 50%, 25%,.. were used for PCA analysis as above
 join pop_list.txt IND_SGDP_HGSVC.evec > IND_SGDP_HGSVC_pop.evec
 #In R
 d3<-read.csv("IND_SGDP_HGSVC_pop.evec", sep="\t", header=T)
